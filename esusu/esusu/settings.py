@@ -98,7 +98,11 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'TEST': {
-            'NAME': os.path.join(BASE_DIR, 'testdb.sqlite3'),
+            'NAME': 'esusu_test_db',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         },
     }
 }

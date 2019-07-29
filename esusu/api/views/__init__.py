@@ -1,2 +1,4 @@
+from .credit import NewCreditView
+from .society import (MySociety, SearchSocietiesView, SocietyContributions,
+                      SocietyDetail, SocietyView)
 from .user import UserView
-from .society import SocietyView, SocietyDetail, MySociety, SearchSocietiesView

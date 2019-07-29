@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from ..manager import SocietyManager
+from .society_account import SocietyAccount
 
 
 class Society(models.Model):
@@ -39,6 +40,11 @@ class Society(models.Model):
 		),
 	)
 	date_created = models.DateTimeField(default=timezone.now)
+	account = models.OneToOneField(
+		SocietyAccount,
+		on_delete=models.CASCADE,
+		# primary_key=True,
+	)
 
 
 	REQUIRED_FIELDS = ['name', 'description', 'maximum_capacity', 'periodic_amount', 'is_searchable']
