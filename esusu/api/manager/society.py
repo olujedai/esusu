@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from ..models.society_account import SocietyAccount
 
 
 class SocietyManager(models.Manager):
@@ -10,8 +11,13 @@ class SocietyManager(models.Manager):
 		"""
 		user = data['creator']
 		del data['creator']
+		account = SocietyAccount()
+		account.save()
+		data['account'] = account
+
 		society = self.model(**data)
 		society.save()
+
 		user.society = society
 		user.is_society_admin = True
 		user.save()

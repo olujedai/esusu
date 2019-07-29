@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from ..models import Society, User
-from ..serializers import SocietySerializer
+from ..serializers import SocietySerializer, SocietyUserSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -64,3 +64,19 @@ class SearchSocietiesView(generics.ListAPIView):
 		if name is not None:
 			queryset = queryset.filter(name__unaccent__icontains=name)
 		return queryset
+
+
+class SocietyContributions(generics.RetrieveAPIView):
+	"""
+	Edit, Delete or Retrieve the details of my society.
+	"""
+	permission_classes = (IsAuthenticated,)
+	# queryset = Society.objects.all()
+	# serializer_class = SocietySerializer
+	# lookup_field = 'email'
+
+	def retrieve(self, request):
+		queryset = User.objects.filter(email=self.request.user.email).first()
+		if not queryset or not hasattr(queryset, 'society'):
+			return Response({'message': 'Society not found'}, status=status.HTTP_404_NOT_FOUND)
+		return Response(SocietyUserSerializer(queryset.society).data, status=status.HTTP_200_OK)

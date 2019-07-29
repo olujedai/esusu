@@ -1,10 +1,10 @@
 from rest_framework.serializers import ModelSerializer
 from ..models import Society
-from .user import UserSerializer
-
+from .society_account import SocietyAccountSerializer
+from .user import UserContributionsSerializer
 
 class SocietySerializer(ModelSerializer):
-    users = UserSerializer(many=True, read_only=True)
+    account = SocietyAccountSerializer(read_only=True)
     class Meta:
         model = Society
         fields = '__all__'
@@ -12,3 +12,10 @@ class SocietySerializer(ModelSerializer):
     def save(self):
         self.validated_data['creator'] = self.context['request'].user
         super().save()
+
+    def get_contributions(self):
+        return Society.objects.get_contributions(**self.data)
+
+
+class SocietyUserSerializer(SocietySerializer):
+    users = UserContributionsSerializer(many=True, read_only=True)
