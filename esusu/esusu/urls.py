@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import UserView, SocietyView, SocietyDetail, MySociety, SearchSocietiesView, SocietyContributions, NewCreditView
+from api.views import UserView, SocietyView, SocietyDetail, MySociety, SearchSocietiesView, SocietyContributions, NewCreditView, InviteUserToSocietyView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -27,6 +27,7 @@ urlpatterns = [
     path('society/', SocietyView.as_view()),
     path('society/<int:pk>/', SocietyDetail.as_view()),
     path('society/me/', MySociety.as_view()),
+    path('society/invite/<int:pk>/', InviteUserToSocietyView.as_view()),
     path('society/search/', SearchSocietiesView.as_view()),
     path('society/contributions/', SocietyContributions.as_view()),
     path('credit/', NewCreditView.as_view()),

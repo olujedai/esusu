@@ -1,10 +1,12 @@
-from rest_framework import generics
+from django.http import Http404
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
 
 from ..models import Society, User
+from ..permissions import IsASocietyAdmin
 from ..serializers import SocietySerializer, SocietyUserSerializer
-from rest_framework.permissions import IsAuthenticated
+from ..exceptions import CustomException
 
 
 class SocietyView(generics.ListCreateAPIView):
@@ -52,6 +54,7 @@ class SearchSocietiesView(generics.ListAPIView):
 	"""
 	Search for societies to join.
 	"""
+	permission_classes = (IsAuthenticated,)
 	serializer_class = SocietySerializer
 
 	def get_queryset(self):
@@ -70,13 +73,31 @@ class SocietyContributions(generics.RetrieveAPIView):
 	"""
 	Edit, Delete or Retrieve the details of my society.
 	"""
-	permission_classes = (IsAuthenticated,)
-	# queryset = Society.objects.all()
-	# serializer_class = SocietySerializer
-	# lookup_field = 'email'
+	permission_classes = (IsAuthenticated, IsASocietyAdmin,)
 
 	def retrieve(self, request):
-		queryset = User.objects.filter(email=self.request.user.email).first()
-		if not queryset or not hasattr(queryset, 'society'):
-			return Response({'message': 'Society not found'}, status=status.HTTP_404_NOT_FOUND)
-		return Response(SocietyUserSerializer(queryset.society).data, status=status.HTTP_200_OK)
+		return Response(SocietyUserSerializer(request.user.society).data, status=status.HTTP_200_OK)
+
+
+class InviteUserToSocietyView(generics.UpdateAPIView):
+	"""
+	Invite a user to a view.
+	"""
+	permission_classes = (IsAuthenticated, IsASocietyAdmin,)
+	serializer_class = SocietySerializer
+
+	def get_object(self, pk):
+		try:
+			return User.objects.get(pk=pk)
+		except User.DoesNotExist:
+			raise Http404
+
+	def update(self, request, pk):
+		invited_user = self.get_object(pk)
+		if invited_user.society:
+			raise CustomException(
+				detail='This user already belongs to another society',
+				status_code='409'
+			)
+		User.objects.invite_user(invited_user)
+		return Response({'message': 'User successfully invited.'}, status=status.HTTP_200_OK)
