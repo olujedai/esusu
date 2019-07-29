@@ -6,10 +6,14 @@ class IsAuthenticatedNotPost(permissions.IsAuthenticated):
             return True
         return super(IsAuthenticatedNotPost, self).has_permission(request, view)
 
-class IsSocietyAdmin(permissions.BasePermission):
+class IsASocietyAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_society_admin
 
-class IsInAGroup(permissions.BasePermission):
+class IsInASociety(permissions.BasePermission):
     def has_permission(self, request, view):
         return bool(request.user.society)
+
+class IsNotInASociety(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return not bool(request.user.society)

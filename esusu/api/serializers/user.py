@@ -6,9 +6,13 @@ from .utils import in_this_month
 class BaseUserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		exclude = ('groups', 'user_permissions', 'society', 'password')
+		exclude = ('groups', 'user_permissions', 'society')
+		extra_kwargs = {
+			'password': {'write_only': True}
+		}
 
 	def create_user(self):
+		print(self.validated_data)
 		return User.objects.create_user(**self.validated_data)
 
 	def create_superuser(self):
@@ -46,8 +50,6 @@ class UserRegistrationSerializer(serializers.Serializer):
 		if not data.get('password') or not data.get('confirm_password'):
 			raise serializers.ValidationError("Please enter a password and "
 				"confirm it.")
-
 		if data.get('password') != data.get('confirm_password'):
 			raise serializers.ValidationError("Passwords don't match.")
-
 		return data
