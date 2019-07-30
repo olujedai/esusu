@@ -99,5 +99,7 @@ class InviteUserToSocietyView(generics.UpdateAPIView):
 				detail='This user already belongs to another society',
 				status_code='409'
 			)
-		User.objects.invite_user(invited_user)
+		inviter = request.user
+		server_name = request.META['HTTP_HOST']
+		User.objects.invite_user(server_name, inviter, invited_user)
 		return Response({'message': 'User successfully invited.'}, status=status.HTTP_200_OK)

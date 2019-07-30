@@ -31,6 +31,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 	objects = UserManager()
 
+	@property
+	def full_name(self):
+		return f'{self.first_name} {self.last_name}'
 
 # @receiver(post_save, sender=Society)
 # def save_the_society_and_make_creator_admin(sender, instance, created, **kwargs):
