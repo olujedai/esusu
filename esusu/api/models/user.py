@@ -27,21 +27,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 	society = models.ForeignKey(Society, related_name="users", null=True, on_delete=models.SET_NULL)  # A user does not have to belong to a savings society.
 
 	USERNAME_FIELD = 'email'
-	# REQUIRED_FIELDS = []
+	REQUIRED_FIELDS = ['first_name', 'last_name', 'password']
 
 	objects = UserManager()
 
 	@property
 	def full_name(self):
 		return f'{self.first_name} {self.last_name}'
-
-# @receiver(post_save, sender=Society)
-# def save_the_society_and_make_creator_admin(sender, instance, created, **kwargs):
-# 	"""
-# 	Add the user to the group and make the creator of the society the society administrator.
-# 	"""
-# 	if created:
-# 		user.society = request.user
-# 		# user = instance.users.all()[0]
-# 		user.is_society_admin = True
-# 		user.save()
