@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
-from django.http import HttpResponseGone
+
 from ..exceptions import CustomException
 
 
@@ -73,7 +73,15 @@ class UserManager(BaseUserManager):
 		inviter = self.model.objects.get(pk=inviter_id)
 		invitee = self.model.objects.get(pk=invitee_id)
 		if not inviter.society:
-			raise HttpResponseGone('This society does not exist anymore.')
+			raise CustomException(
+				detail='This society does not exist anymore.',
+				status_code='410',
+			)
+		if len(inviter.society.users.all()) >= inviter.society.maximum_capacity:
+			raise CustomException(
+				detail='The maximum number of users that can join this society has been reached.',
+				status_code='410',
+			)
 		if invitee.society:
 			detail = 'You are already a member of this society.'
 			if invitee.society != inviter.society:

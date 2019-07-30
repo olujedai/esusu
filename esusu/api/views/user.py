@@ -45,13 +45,21 @@ class InviteUserToSocietyView(generics.UpdateAPIView):
 
 	def update(self, request, pk):
 		invited_user = self.get_object(pk)
-		if invited_user.society:
-			raise CustomException(
-				detail='This user already belongs to another society',
-				status_code='409'
-			)
 		inviter = request.user
+		# if inviter.society.maximum_capacity >= len(inviter.society.users.all()):
+		# 	raise CustomException(
+		# 		detail='Maximum number of users in this society has been reached.',
+		# 		status_code='403'
+		# 	)
+		# if invited_user.society:
+		# 	raise CustomException(
+		# 		detail='This user already belongs to another society',
+		# 		status_code='409'
+		# 	)
 		server_name = request.META['HTTP_HOST']
+		print(dir(request))
+		from pprint import pprint
+		# pprint(request.META)
 		User.objects.invite_user(server_name, inviter, invited_user)
 		return Response({'message': 'User invite sent.'}, status=status.HTTP_202_ACCEPTED)
 
