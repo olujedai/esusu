@@ -77,29 +77,3 @@ class SocietyContributions(generics.RetrieveAPIView):
 
 	def retrieve(self, request):
 		return Response(SocietyUserSerializer(request.user.society).data, status=status.HTTP_200_OK)
-
-
-class InviteUserToSocietyView(generics.UpdateAPIView):
-	"""
-	Invite a user to a view.
-	"""
-	permission_classes = (IsAuthenticated, IsASocietyAdmin,)
-	serializer_class = SocietySerializer
-
-	def get_object(self, pk):
-		try:
-			return User.objects.get(pk=pk)
-		except User.DoesNotExist:
-			raise Http404
-
-	def update(self, request, pk):
-		invited_user = self.get_object(pk)
-		if invited_user.society:
-			raise CustomException(
-				detail='This user already belongs to another society',
-				status_code='409'
-			)
-		inviter = request.user
-		server_name = request.META['HTTP_HOST']
-		User.objects.invite_user(server_name, inviter, invited_user)
-		return Response({'message': 'User successfully invited.'}, status=status.HTTP_200_OK)
