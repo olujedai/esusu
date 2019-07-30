@@ -11,20 +11,20 @@ class Society(models.Model):
 		max_length=150,
 		unique=True,
 		help_text=_(
-			'Designates the name of the group.'
+			'Designates the name of the society.'
 		),
 	)
 	description = models.CharField(
 		_('description'),
 		max_length=300,
 		help_text=_(
-			'A description of the group.'
+			'A description of the society.'
 		),
 	)
 	maximum_capacity = models.IntegerField(
 		_('maximum capacity'),
 		help_text=_(
-			'Designates the maximum number people that can be in the group.'
+			'Designates the maximum number people that can be in the society.'
 		),
 	)
 	periodic_amount = models.IntegerField(
