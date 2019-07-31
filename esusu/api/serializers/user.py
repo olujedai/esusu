@@ -7,6 +7,8 @@ from rest_framework import serializers, status
 from ..email import send_invite
 from ..models import User
 from .utils import this_month, tenure_deadline_passed
+from ..exceptions import CustomException
+
 
 class BaseUserSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -26,8 +28,8 @@ class BaseUserSerializer(serializers.ModelSerializer):
 
 class UserInvitationSerializer(serializers.Serializer):
 
-	def validate_invite(inviter, invited_user):
-		if inviter.society.maximum_capacity >= inviter.society.users.count():
+	def validate_invite(self, inviter, invited_user):
+		if inviter.society.users.count() >= inviter.society.maximum_capacity:
 			raise CustomException(
 				detail='Maximum number of users in this society has been reached.',
 				status_code='403'
@@ -69,7 +71,7 @@ class UserInvitationSerializer(serializers.Serializer):
 
 		send_invite(subject, EMAIL_HOST_USER, invitee.email, **email_values)
 
-	def validate_user_join(inviter, invitee):
+	def validate_user_join(self, inviter, invitee):
 		if tenure_deadline_passed(inviter):
 			raise CustomException(
 				detail='The last date for a user to join this group has passed.',

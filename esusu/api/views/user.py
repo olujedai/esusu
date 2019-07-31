@@ -4,18 +4,24 @@ from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from ..exceptions import CustomException
 from ..models import User
-from ..permissions import IsASocietyAdmin
+from ..permissions import IsASocietyAdmin, IsSudoUser
 from ..serializers import BaseUserSerializer, UserRegistrationSerializer, UserInvitationSerializer
 
 
-class UserView(APIView):
+class UserView(generics.ListCreateAPIView):
 	"""
-	List all users, or create a new snippet.
+	List all users, or create a new user.
 	"""
+	def get_permissions(self):
+		if self.request.method == 'GET':
+			permission_classes = [IsAuthenticated, IsSudoUser]
+		else:
+			permission_classes = []
+		return [permission() for permission in permission_classes]
+
 	def get(self, request, format=None):
 		users = User.objects.all()
 		serializer = BaseUserSerializer(users, many=True)
