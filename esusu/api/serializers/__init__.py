@@ -3,5 +3,5 @@ from .credit import CreditSerializer
 from .society import SocietySerializer, SocietyUserSerializer, SocietyDetailsSerializer
 from .society_account import SocietyAccountSerializer
 from .tenure import TenureSerializer
-from .user import (BaseUserSerializer, UserContributionsSerializer,
+from .user import (BaseUserSerializer, UserInvitationSerializer, UserContributionsSerializer,
                    UserRegistrationSerializer)

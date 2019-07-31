@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from ..exceptions import CustomException
 from ..models import User
 from ..permissions import IsASocietyAdmin
-from ..serializers import BaseUserSerializer, UserRegistrationSerializer
+from ..serializers import BaseUserSerializer, UserRegistrationSerializer, UserInvitationSerializer
 
 
 class UserView(APIView):
@@ -46,21 +46,8 @@ class InviteUserToSocietyView(generics.UpdateAPIView):
 	def update(self, request, pk):
 		invited_user = self.get_object(pk)
 		inviter = request.user
-		# if inviter.society.maximum_capacity >= len(inviter.society.users.all()):
-		# 	raise CustomException(
-		# 		detail='Maximum number of users in this society has been reached.',
-		# 		status_code='403'
-		# 	)
-		# if invited_user.society:
-		# 	raise CustomException(
-		# 		detail='This user already belongs to another society',
-		# 		status_code='409'
-		# 	)
 		server_name = request.META['HTTP_HOST']
-		print(dir(request))
-		from pprint import pprint
-		# pprint(request.META)
-		User.objects.invite_user(server_name, inviter, invited_user)
+		UserInvitationSerializer().invite_user(server_name, inviter, invited_user)
 		return Response({'message': 'User invite sent.'}, status=status.HTTP_202_ACCEPTED)
 
 
@@ -89,5 +76,5 @@ class JoinSocietyView(generics.RetrieveAPIView):
 				detail='Bad signature',
 				status_code='400'
 			)
-		User.objects.join_society(**society_params)
+		UserInvitationSerializer().join_society(**society_params)
 		return Response({'message': 'Success.'}, status=status.HTTP_200_OK)
