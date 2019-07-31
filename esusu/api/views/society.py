@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from ..models import Society, User
 from ..permissions import IsASocietyAdmin
-from ..serializers import SocietySerializer, SocietyUserSerializer
+from ..serializers import SocietySerializer, SocietyUserSerializer, SocietyDetailsSerializer
 from ..exceptions import CustomException
 
 
@@ -18,12 +18,21 @@ class SocietyView(generics.ListCreateAPIView):
 	serializer_class = SocietySerializer
 
 
-class SocietyDetail(generics.RetrieveUpdateDestroyAPIView):
+class OneSociety(generics.RetrieveUpdateDestroyAPIView):
 	"""
 	Edit, Delete or Retrieve the details of one society.
 	"""
 	queryset = Society.objects.all()
 	serializer_class = SocietySerializer
+
+
+class SocietyDetail(generics.RetrieveAPIView):
+	"""
+	Retrieve the complete details of one society.
+	"""
+	queryset = Society.objects.all()
+	serializer_class = SocietyDetailsSerializer
+
 
 class MySociety(generics.RetrieveUpdateDestroyAPIView):
 	"""

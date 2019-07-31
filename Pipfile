@@ -10,6 +10,7 @@ django = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 psycopg2-binary = "*"
+arrow = "*"
 
 [requires]
 python_version = "3.7"
