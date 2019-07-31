@@ -7,7 +7,7 @@ from rest_framework import serializers
 
 from ..models import CollectionSchedule, Tenure
 from .collection_schedule import CollectionScheduleSerializer
-from .utils import get_max_end_date_time, in_the_past, in_this_month, shift_by
+from .utils import get_max_end_date_time, in_the_past, shift_by
 
 
 class TenureSerializer(serializers.ModelSerializer):

@@ -46,6 +46,7 @@ class InviteUserToSocietyView(generics.UpdateAPIView):
 	def update(self, request, pk):
 		invited_user = self.get_object(pk)
 		inviter = request.user
+		UserInvitationSerializer().validate_invite(inviter, invited_user)
 		server_name = request.META['HTTP_HOST']
 		UserInvitationSerializer().invite_user(server_name, inviter, invited_user)
 		return Response({'message': 'User invite sent.'}, status=status.HTTP_202_ACCEPTED)
@@ -76,5 +77,8 @@ class JoinSocietyView(generics.RetrieveAPIView):
 				detail='Bad signature',
 				status_code='400'
 			)
-		UserInvitationSerializer().join_society(**society_params)
+		inviter = self.get_object(society_params['inviter_id'])
+		invitee = self.get_object(society_params['invitee_id'])
+		UserInvitationSerializer().validate_user_join(inviter, invitee)
+		UserInvitationSerializer().join_society(inviter, invitee)
 		return Response({'message': 'Success.'}, status=status.HTTP_200_OK)
