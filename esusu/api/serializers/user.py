@@ -6,8 +6,7 @@ from rest_framework import serializers, status
 
 from ..email import send_invite
 from ..models import User
-from .utils import in_this_month
-
+from .utils import this_month, tenure_deadline_passed
 
 class BaseUserSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -26,6 +25,23 @@ class BaseUserSerializer(serializers.ModelSerializer):
 
 
 class UserInvitationSerializer(serializers.Serializer):
+
+	def validate_invite(inviter, invited_user):
+		if inviter.society.maximum_capacity >= inviter.society.users.count():
+			raise CustomException(
+				detail='Maximum number of users in this society has been reached.',
+				status_code='403'
+			)
+		if tenure_deadline_passed(inviter):
+			raise CustomException(
+				detail='The last date for a user to join this group has passed.',
+				status_code='403'
+			)
+		if invited_user.society:
+			raise CustomException(
+				detail='This user already belongs to another society',
+				status_code='409'
+			)
 
 	def invite_user(self, server_name, inviter, invitee):
 		"""
@@ -53,12 +69,12 @@ class UserInvitationSerializer(serializers.Serializer):
 
 		send_invite(subject, EMAIL_HOST_USER, invitee.email, **email_values)
 
-	def join_society(self, inviter_id, invitee_id):
-		"""
-		Send an invite to a user to join your society.
-		"""
-		inviter = User.objects.get(pk=inviter_id)
-		invitee = User.objects.get(pk=invitee_id)
+	def validate_user_join(inviter, invitee):
+		if tenure_deadline_passed(inviter):
+			raise CustomException(
+				detail='The last date for a user to join this group has passed.',
+				status_code='403'
+			)
 		if not inviter.society:
 			raise CustomException(
 				detail='This society does not exist anymore.',
@@ -77,6 +93,11 @@ class UserInvitationSerializer(serializers.Serializer):
 				detail=detail,
 				status_code='409',
 			)
+
+	def join_society(self, inviter, invitee):
+		"""
+		Send an invite to a user to join your society.
+		"""
 		invitee.society = inviter.society
 		invitee.save()
 
@@ -85,7 +106,10 @@ class UserContributionsSerializer(BaseUserSerializer):
 	all_time_contribution = serializers.SerializerMethodField()
 
 	def get_contributions_this_month(self, user):
-		contribution = sum([contribution.amount for contribution in user.contributions.all() if in_this_month(contribution.date_credited)])
+		print(user.contributions.dates('date_credited', 'month'))
+		contribution = sum([contribution.amount for contribution in user.contributions.filter(
+			date_credited__month__gte=this_month(),
+			date_credited__month__lte=this_month()).all()])
 		return contribution
 
 	def get_all_time_contribution(self, user):
