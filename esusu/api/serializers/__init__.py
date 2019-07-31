@@ -1,4 +1,7 @@
+from .collection_schedule import CollectionScheduleSerializer
 from .credit import CreditSerializer
-from .society import SocietySerializer, SocietyUserSerializer
+from .society import SocietySerializer, SocietyUserSerializer, SocietyDetailsSerializer
 from .society_account import SocietyAccountSerializer
-from .user import UserRegistrationSerializer, UserContributionsSerializer, BaseUserSerializer
+from .tenure import TenureSerializer
+from .user import (BaseUserSerializer, UserContributionsSerializer,
+                   UserRegistrationSerializer)

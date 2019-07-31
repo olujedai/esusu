@@ -10,8 +10,8 @@ from django.db.models.signals import post_save
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
 	email = models.EmailField(_('email address'), unique=True)
-	first_name = models.CharField(_('first name'), max_length=30, blank=True)
-	last_name = models.CharField(_('last name'), max_length=150, blank=True)
+	first_name = models.CharField(_('first name'), max_length=30)
+	last_name = models.CharField(_('last name'), max_length=150)
 
 	is_staff = models.BooleanField(default=False)
 	is_superuser = models.BooleanField(default=False)

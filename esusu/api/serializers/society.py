@@ -19,3 +19,6 @@ class SocietySerializer(ModelSerializer):
 
 class SocietyUserSerializer(SocietySerializer):
     users = UserContributionsSerializer(many=True, read_only=True)
+
+class SocietyDetailsSerializer(SocietyUserSerializer):
+    pass

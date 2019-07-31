@@ -1,4 +1,5 @@
 from .credit import NewCreditView
 from .society import (MySociety, SearchSocietiesView, SocietyContributions,
-                      SocietyDetail, SocietyView)
-from .user import UserView, InviteUserToSocietyView, JoinSocietyView
+                      OneSociety, SocietyDetail, SocietyView)
+from .tenure import NewTenureView, TenureDetail
+from .user import InviteUserToSocietyView, JoinSocietyView, UserView
