@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from ..manager import SocietyManager
 from .society_account import SocietyAccount
+import arrow
 
 
 class Society(models.Model):
@@ -53,3 +54,12 @@ class Society(models.Model):
 	
 	class Meta:
 		verbose_name_plural = 'societies'
+
+	@property
+	def active_tenure(self):
+		todays_date = arrow.now('Africa/Lagos').date()
+		return self.tenures.filter(
+			start_date__lte=todays_date,
+			maximum_end_date__gte=todays_date,
+		).first()
+		

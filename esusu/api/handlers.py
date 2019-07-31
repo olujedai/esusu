@@ -17,7 +17,7 @@ def user_joined_society_handler(sender, **params):
             newest_tenure.save()
             new_schedule = CollectionSchedule(
 				user=user,
-				collection_date=last_collection.collection_date,
+				collection_date=new_tentative_end_date,
 				tenure=newest_tenure,
             )
             new_schedule.save()

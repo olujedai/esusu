@@ -5,13 +5,13 @@ from rest_framework.response import Response
 
 from ..models import Society, User
 from ..permissions import IsASocietyAdmin
-from ..serializers import SocietySerializer, SocietyUserSerializer, SocietyDetailsSerializer
+from ..serializers import SocietySerializer, SocietyUserSerializer, SocietyTenureSerializer
 from ..exceptions import CustomException
 
 
 class SocietyView(generics.ListCreateAPIView):
 	"""
-	List all cooperative societies, create a new society.
+	List all Esusu societies or create a new society.
 	"""
 	permission_classes = (IsAuthenticated,)
 	queryset = Society.objects.filter(is_searchable=True).all()
@@ -22,16 +22,21 @@ class OneSociety(generics.RetrieveUpdateDestroyAPIView):
 	"""
 	Edit, Delete or Retrieve the details of one society.
 	"""
+	permission_classes = (IsAuthenticated,)
 	queryset = Society.objects.all()
 	serializer_class = SocietySerializer
 
 
-class SocietyDetail(generics.RetrieveAPIView):
+class SocietyTenure(generics.RetrieveAPIView):
 	"""
 	Retrieve the complete details of one society.
 	"""
-	queryset = Society.objects.all()
-	serializer_class = SocietyDetailsSerializer
+	permission_classes = (IsAuthenticated, IsASocietyAdmin)
+
+	def retrieve(self, request):
+		print(request.user.society)
+		return Response(SocietyTenureSerializer(request.user.society).data, status=status.HTTP_200_OK)
+
 
 
 class MySociety(generics.RetrieveUpdateDestroyAPIView):
