@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from .society import Society
+import arrow
 
 
 class Tenure(models.Model):
@@ -41,5 +42,11 @@ class Tenure(models.Model):
 	class Meta:
 		verbose_name_plural = 'tenure'
 
-	def newest_tenure(self):
-		return self.model.objects.order_by('-start_date').first()
+	def is_active(self):
+		todays_date = arrow.now('Africa/Lagos').date()
+		return todays_date > self.start_date and todays_date <= tentative_end_date
+
+	def starts_soon(self):
+		todays_date = arrow.now('Africa/Lagos').date()
+		return todays_date <= self.start_date
+

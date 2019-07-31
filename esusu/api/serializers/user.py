@@ -8,6 +8,7 @@ from ..email import send_invite
 from ..models import User
 from .utils import this_month, tenure_deadline_passed
 from ..exceptions import CustomException
+from ..signals import user_joined_society
 
 
 class BaseUserSerializer(serializers.ModelSerializer):
@@ -102,6 +103,8 @@ class UserInvitationSerializer(serializers.Serializer):
 		"""
 		invitee.society = inviter.society
 		invitee.save()
+		user_joined_society.send(sender=None, user=invitee)
+
 
 class UserContributionsSerializer(BaseUserSerializer):
 	contributions_this_month = serializers.SerializerMethodField()
