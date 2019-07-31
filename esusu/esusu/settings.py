@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 
     'django.contrib.postgres',
     'rest_framework',
-    'api',
+    'api.apps.AppConfig',
 ]
 
 AUTH_USER_MODEL = 'api.User'
