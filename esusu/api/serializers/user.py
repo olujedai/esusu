@@ -1,4 +1,10 @@
+import os
+
+from django.conf import settings
+from django.core import signing
 from rest_framework import serializers, status
+
+from ..email import send_invite
 from ..models import User
 from .utils import in_this_month
 
@@ -18,6 +24,61 @@ class BaseUserSerializer(serializers.ModelSerializer):
 	def create_superuser(self):
 		return User.objects.create_superuser(**self.validated_data)
 
+
+class UserInvitationSerializer(serializers.Serializer):
+
+	def invite_user(self, server_name, inviter, invitee):
+		"""
+		Send an invite to a user to join your society.
+		"""
+
+		SECRET_KEY = settings.SECRET_KEY
+		EMAIL_HOST_USER = settings.EMAIL_HOST_USER
+
+		payload = {
+			'inviter_id': inviter.id,
+			'invitee_id': invitee.id,
+		}
+
+		signed_string = signing.dumps(payload, key=SECRET_KEY)
+		society_name = inviter.society.name
+
+		subject = f'Join the {society_name} Esusu Society Today'
+		email_values = {
+			'receiver': invitee,
+			'sender': inviter,
+			'society_name': society_name,
+			'signup_url': f'{server_name}/join/?society={signed_string}',
+		}
+
+		send_invite(subject, EMAIL_HOST_USER, invitee.email, **email_values)
+
+	def join_society(self, inviter_id, invitee_id):
+		"""
+		Send an invite to a user to join your society.
+		"""
+		inviter = User.objects.get(pk=inviter_id)
+		invitee = User.objects.get(pk=invitee_id)
+		if not inviter.society:
+			raise CustomException(
+				detail='This society does not exist anymore.',
+				status_code='410',
+			)
+		if inviter.society.users.count() >= inviter.society.maximum_capacity:
+			raise CustomException(
+				detail='The maximum number of users that can join this society has been reached.',
+				status_code='410',
+			)
+		if invitee.society:
+			detail = 'You are already a member of this society.'
+			if invitee.society != inviter.society:
+				detail = 'You already belong to another society.'
+			raise CustomException(
+				detail=detail,
+				status_code='409',
+			)
+		invitee.society = inviter.society
+		invitee.save()
 
 class UserContributionsSerializer(BaseUserSerializer):
 	contributions_this_month = serializers.SerializerMethodField()

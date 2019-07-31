@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-# from ..manager import CollectionScheduleManager
 from .tenure import Tenure
 from .user import User
 
@@ -25,8 +24,6 @@ class CollectionSchedule(models.Model):
 		related_name="collection_schedules",
 		on_delete=models.CASCADE
 	)
-
-	# objects = CollectionScheduleManager()
 	
 	class Meta:
 		verbose_name_plural = 'collection_schedules'
