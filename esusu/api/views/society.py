@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ..models import Society, User
-from ..permissions import IsASocietyAdmin
+from ..permissions import IsASocietyAdmin, IsNotInASociety
 from ..serializers import SocietySerializer, SocietyUserSerializer, SocietyTenureSerializer
 from ..exceptions import CustomException
 
@@ -13,7 +13,7 @@ class SocietyView(generics.ListCreateAPIView):
 	"""
 	List all Esusu societies or create a new society.
 	"""
-	permission_classes = (IsAuthenticated,)
+	permission_classes = (IsAuthenticated, IsNotInASociety,)
 	queryset = Society.objects.filter(is_searchable=True).all()
 	serializer_class = SocietySerializer
 
@@ -34,7 +34,6 @@ class SocietyTenure(generics.RetrieveAPIView):
 	permission_classes = (IsAuthenticated, IsASocietyAdmin)
 
 	def retrieve(self, request):
-		print(request.user.society)
 		return Response(SocietyTenureSerializer(request.user.society).data, status=status.HTTP_200_OK)
 
 
