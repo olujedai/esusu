@@ -12,7 +12,7 @@ class SocietyTests(APITestCase):
     def setUp(self):
         self.valid_payload = {
             'name': 'Team Comfam',
-            'description': 'Esusu group for staff of Team Confam',
+            'description': 'Esusu society for staff of Team Confam',
             'maximum_capacity': 10,
             'periodic_amount': 100000,
             'is_searchable': True,
@@ -24,9 +24,9 @@ class SocietyTests(APITestCase):
         self.url = path('society/', self.view)
         self.factory = APIRequestFactory()
 
-    def test_society_creation(self):
+    def test_user_can_create_a_society(self):
         """
-        Ensure a new user can setup a new esusu group.
+        Ensure a new user can setup a new esusu society.
         """
         self.assertEqual(self.user.is_society_admin, False)
 
