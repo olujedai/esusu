@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
 
 from api.models import Society
-from api.views import SocietyView, SearchSocietiesView
-from .utils import get_auth_token, get_test_user, create_fake_society, delete_all_societies, get_fake_user
+from api.views import SocietyView, SearchSocietiesView, SocietyContributions
+from .utils import get_auth_token, get_test_user, create_fake_society, delete_all_societies, get_fake_user, add_user_to_society
 from rest_framework.test import force_authenticate
 
 
@@ -24,6 +24,10 @@ class SocietyTests(APITestCase):
 
         self.search_society_view = SearchSocietiesView.as_view()
         self.search_society_url = path('society/search/', self.search_society_view)
+
+        self.society_contributions_view = SocietyContributions.as_view()
+        self.society_contributions_url = path('society/contributions/', self.society_contributions_view, name='society-contribution')
+
         self.factory = APIRequestFactory()
 
     def test_user_can_create_a_society(self):
@@ -83,3 +87,20 @@ class SocietyTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
+    
+    def test_can_view_society_users_and_contribution(self):
+        society = create_fake_society()
+        user = add_user_to_society(society)
+
+        admin_user = society.admin
+
+        request = self.factory.get(self.society_contributions_url, {'': ''}, HTTP_AUTHORIZATION=f'Bearer {get_auth_token(admin_user)}')
+        force_authenticate(request, user=admin_user)
+        response = self.society_contributions_view(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        user_request = self.factory.get(self.society_contributions_url, {'': ''}, HTTP_AUTHORIZATION=f'Bearer {get_auth_token(user)}')
+        force_authenticate(user_request, user=user)
+        response = self.society_contributions_view(user_request)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+

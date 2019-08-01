@@ -56,11 +56,17 @@ def create_fake_society(searchable=True):
     return Society.objects.create(**society)
 
 def get_fake_user():
-    user = User.objects.exclude(email='a.ciroma@confam.com', is_society_admin=False).first()
+    user = User.objects.filter(is_society_admin=False, society__isnull=True).exclude(email='a.ciroma@confam.com').first()
     if not user:
         create_fake_users(2)
-        user = User.objects.exclude(email='a.ciroma@confam.com', is_society_admin=False).first()
+        user = User.objects.filter(is_society_admin=False, society__isnull=True).exclude(email='a.ciroma@confam.com').first()
     return user
 
 def delete_all_societies():
     Society.objects.all().delete()
+
+def add_user_to_society(society):
+    user = get_fake_user()
+    user.society = society
+    user.save()
+    return user
