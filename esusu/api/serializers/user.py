@@ -20,7 +20,6 @@ class BaseUserSerializer(serializers.ModelSerializer):
 		}
 
 	def create_user(self):
-		print(self.validated_data)
 		return User.objects.create_user(**self.validated_data)
 
 	def create_superuser(self):

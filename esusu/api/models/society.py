@@ -62,4 +62,7 @@ class Society(models.Model):
 			start_date__lte=todays_date,
 			maximum_end_date__gte=todays_date,
 		).first()
-		
+	
+	@property
+	def admin(self):
+		return self.users.filter(is_society_admin=True).first()
