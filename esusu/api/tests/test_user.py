@@ -1,8 +1,8 @@
 from django.urls import path
 from rest_framework import status
 from rest_framework.test import APITestCase
-from ..models import User
-from ..views import UserView
+from api.models import User
+from api.views import UserView
 from rest_framework.test import APIRequestFactory
 
 class UserTests(APITestCase):
