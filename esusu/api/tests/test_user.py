@@ -61,10 +61,3 @@ class UserTests(APITestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['non_field_errors'][0], 'Passwords don\'t match.')
-    
-    def test_required_fields(self):
-        """
-        Ensure all required fields are set.
-        """
-        # todo
-        pass
