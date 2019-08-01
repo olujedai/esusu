@@ -78,7 +78,7 @@ class SearchSocietiesView(generics.ListAPIView):
 		queryset = Society.objects.filter(is_searchable=True).all()
 		name = self.request.query_params.get('name', None)
 		if name is not None:
-			queryset = queryset.filter(name__unaccent__icontains=name)
+			queryset = queryset.filter(name__icontains=name)
 		return queryset
 
 
