@@ -112,14 +112,14 @@ def empty_society(society):
 			user.society = None
 			user.save()
 
-def create_tenure(society):
+def create_tenure(society, when=False):
 	tenure = {
-		'start_date': arrow.now('Africa/Lagos').date(),
+		'start_date': when if when else arrow.now('Africa/Lagos').date(),
 	}
 	serializer = TenureSerializer(data=tenure)
 	serializer.society = society
 	serializer.is_valid()
-	serializer.save()
+	return serializer.save()
 
 def get_deadline(tenure):
 	start = tenure.tentative_end_date

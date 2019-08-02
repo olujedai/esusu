@@ -43,7 +43,7 @@ class TenureSerializer(serializers.ModelSerializer):
 			is_before_maximum_end_date = value < newest_tenure.maximum_end_date
 			if is_before_newest_tenure:
 				raise serializers.ValidationError(
-					"A tenure currently exists.", 
+					"A conflicting tenure currently exists.", 
 				)
 			if is_after_newest_tenure and is_before_maximum_end_date:
 				raise serializers.ValidationError(
@@ -57,7 +57,8 @@ class TenureSerializer(serializers.ModelSerializer):
 			society = self.context['request'].user.society
 		except KeyError:  # todo: hack for tests to pass. look into request mocking
 			society = self.society
-		setup_tenure(society, start_date)
+		tenure = setup_tenure(society, start_date)
+		return tenure
 
 
 def setup_tenure(society, start_date):
@@ -86,3 +87,4 @@ def setup_tenure(society, start_date):
 		) for user, collection_date_time in zip(users, collection_date_times)
 	]
 	CollectionSchedule.objects.bulk_create(schedules)
+	return new_tenure

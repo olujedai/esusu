@@ -1,18 +1,19 @@
 from django.urls import path
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import (APIRequestFactory, APITestCase,
+                                 force_authenticate)
+
+from api.exceptions import (MaximumMembersReachedException,
+                            MemberAlreadyInASocietyException,
+                            SocietyGoneException,
+                            TenureDeadlinePassedException)
 from api.models import User
 from api.serializers import UserInvitationSerializer
-from api.exceptions import (
-    MaximumMembersReachedException,
-    TenureDeadlinePassedException,
-    MemberAlreadyInASocietyException,
-    SocietyGoneException,
-)
-from api.views import UserView, InviteUserToSocietyView
-from rest_framework.test import APIRequestFactory, APIClient, force_authenticate
-from .utils import create_fake_society, get_fake_user, get_auth_token, fill_up_society, empty_society, create_tenure, get_deadline
+from api.views import InviteUserToSocietyView, UserView
 
+from .utils import (create_fake_society, create_tenure, empty_society,
+                    fill_up_society, get_auth_token, get_deadline,
+                    get_fake_user)
 
 
 class UserTests(APITestCase):
@@ -75,7 +76,7 @@ class UserTests(APITestCase):
 
     def test_user_invite_validation(self):
         """
-        Ensure we can signup a new user with valid credentials.
+        Ensure an admin can invite a user.
         """
         society = create_fake_society()
         inviter = society.admin
@@ -96,6 +97,9 @@ class UserTests(APITestCase):
         self.assertRaises(TenureDeadlinePassedException, serializer.validate_invite, inviter, invitee, deadline)
 
     def test_validate_user_join(self):
+        """
+        Ensure a user can join a society.
+        """
         society = create_fake_society()
         inviter = society.admin
         invitee = get_fake_user()
@@ -118,4 +122,3 @@ class UserTests(APITestCase):
         tenure = society.active_tenure
         deadline = get_deadline(tenure)
         self.assertRaises(TenureDeadlinePassedException, serializer.validate_user_join, inviter, invitee, deadline)
-
