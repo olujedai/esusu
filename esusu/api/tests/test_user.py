@@ -76,7 +76,7 @@ class UserTests(APITestCase):
 
     def test_user_invite_validation(self):
         """
-        Ensure we can signup a new user with valid credentials.
+        Ensure an admin can invite a user.
         """
         society = create_fake_society()
         inviter = society.admin
@@ -97,6 +97,9 @@ class UserTests(APITestCase):
         self.assertRaises(TenureDeadlinePassedException, serializer.validate_invite, inviter, invitee, deadline)
 
     def test_validate_user_join(self):
+        """
+        Ensure a user can join a society.
+        """
         society = create_fake_society()
         inviter = society.admin
         invitee = get_fake_user()
