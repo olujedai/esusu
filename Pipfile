@@ -12,6 +12,8 @@ djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 psycopg2-binary = "*"
 arrow = "*"
+drf-yasg = "*"
+packaging = "*"
 
 [requires]
 python_version = "3.7"
