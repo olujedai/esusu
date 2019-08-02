@@ -11,7 +11,7 @@ from api.models import User
 from api.serializers import UserInvitationSerializer
 from api.views import InviteUserToSocietyView, UserView
 
-from .utils import (create_fake_society,create_tenure, empty_society,
+from .utils import (create_fake_society, create_tenure, empty_society,
                     fill_up_society, get_auth_token, get_deadline,
                     get_fake_user)
 
