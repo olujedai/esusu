@@ -1,11 +1,14 @@
 from django.urls import path
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.test import (APIRequestFactory, APITestCase,
+                                 force_authenticate)
 
 from api.models import Society
-from api.views import SocietyView, SearchSocietiesView, SocietyContributions
-from .utils import get_auth_token, get_test_user, create_fake_society, delete_all_societies, get_fake_user, add_user_to_society
-from rest_framework.test import force_authenticate
+from api.views import SearchSocietiesView, SocietyContributions, SocietyView
+
+from .utils import (add_user_to_society, create_fake_society,
+                    delete_all_societies, get_auth_token, get_fake_user,
+                    get_test_user)
 
 
 class SocietyTests(APITestCase):
@@ -103,4 +106,3 @@ class SocietyTests(APITestCase):
         force_authenticate(user_request, user=user)
         response = self.society_contributions_view(user_request)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
