@@ -7,7 +7,6 @@ import arrow
 
 
 class SocietySerializer(serializers.ModelSerializer):
-	account = SocietyAccountSerializer(read_only=True)
 	class Meta:
 		model = Society
 		fields = '__all__'
@@ -21,6 +20,7 @@ class SocietySerializer(serializers.ModelSerializer):
 
 
 class SocietyUserSerializer(SocietySerializer):
+	account = SocietyAccountSerializer(read_only=True)
 	users = UserContributionsSerializer(many=True, read_only=True)
 
 

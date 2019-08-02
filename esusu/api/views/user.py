@@ -22,12 +22,24 @@ class UserView(generics.ListCreateAPIView):
 			permission_classes = []
 		return [permission() for permission in permission_classes]
 
+	def get_serializer_class(self):
+		if self.request.method == 'GET':
+			return BaseUserSerializer
+		if self.request.method == 'POST':
+			return UserRegistrationSerializer
+
 	def get(self, request, format=None):
+		"""
+		List all users
+		"""
 		users = User.objects.all()
 		serializer = BaseUserSerializer(users, many=True)
 		return Response(serializer.data)
 
 	def post(self, request, format=None):
+		"""
+		Create a new user
+		"""
 		serializer = UserRegistrationSerializer(data=request.data)
 		serializer.is_valid(raise_exception=True)
 
@@ -42,6 +54,7 @@ class InviteUserToSocietyView(generics.UpdateAPIView):
 	Invite a user to a view.
 	"""
 	permission_classes = (IsAuthenticated, IsASocietyAdmin,)
+	serializer_class = UserInvitationSerializer
 
 	def get_object(self, pk):
 		try:
@@ -62,6 +75,7 @@ class JoinSocietyView(generics.RetrieveAPIView):
 	"""
 	View to handle user's accepting the invite.
 	"""
+	serializer_class = UserInvitationSerializer
 
 	def get_object(self, pk):
 		try:

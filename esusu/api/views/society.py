@@ -1,4 +1,6 @@
 from django.http import Http404
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -32,19 +34,20 @@ class SocietyTenure(generics.RetrieveAPIView):
 	Retrieve the complete details of one society.
 	"""
 	permission_classes = (IsAuthenticated, IsASocietyAdmin)
+	serializer_class = SocietyTenureSerializer
 
 	def retrieve(self, request):
 		return Response(SocietyTenureSerializer(request.user.society).data, status=status.HTTP_200_OK)
 
 
 
-class MySociety(generics.RetrieveUpdateDestroyAPIView):
+class MySociety(generics.RetrieveAPIView):
 	"""
 	Edit, Delete or Retrieve the details of my society.
 	"""
 	permission_classes = (IsAuthenticated,)
 	# queryset = Society.objects.all()
-	# serializer_class = SocietySerializer
+	serializer_class = SocietySerializer
 	# lookup_field = 'email'
 
 	def retrieve(self, request):
@@ -63,6 +66,7 @@ class MySociety(generics.RetrieveUpdateDestroyAPIView):
 		return Response(SocietySerializer(queryset.society).data, status=status.HTTP_201_CREATED)
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(operation_description='Search for public societies.'))
 class SearchSocietiesView(generics.ListAPIView):
 	"""
 	Search for societies to join.
@@ -87,6 +91,7 @@ class SocietyContributions(generics.RetrieveAPIView):
 	Edit, Delete or Retrieve the details of my society.
 	"""
 	permission_classes = (IsAuthenticated, IsASocietyAdmin,)
+	serializer_class = SocietyUserSerializer
 
 	def retrieve(self, request):
 		return Response(SocietyUserSerializer(request.user.society).data, status=status.HTTP_200_OK)
