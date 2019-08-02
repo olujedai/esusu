@@ -14,7 +14,7 @@ Esusu societies finally digitised.
 
 4. Navigate to the esusu folder (```cd esusu```)
 
-5. Build the containers using ```docker-compose build``` -  back-end and database together.
+5. Build the backend and datebase images using ```docker-compose build```.
 It will take a fair bit of time the first time you do it, subsequently it will be much faster. If you get any errors, please get in touch!  
 
 6. Launch the containers using ```docker-compose up``` . You can then navigate to the swagger UI in your browser at ```http://localhost:8000/swagger```.
@@ -27,4 +27,4 @@ It will take a fair bit of time the first time you do it, subsequently it will b
 * **Web Framework**: [Django](https://www.djangoproject.com/)
 * **REST API**: [Django Rest Framework](https://django-rest-framework.org/)
 * **Database**: [PostgreSQL](https://www.postgresql.org/)
-* **OpenAPI Definitions**: [drf-yasg - Yet another Swagger generator](https://github.com/axnsan12/drf-yasg/)
+* **OpenAPI**: [Yet another Swagger generator](https://github.com/axnsan12/drf-yasg/)

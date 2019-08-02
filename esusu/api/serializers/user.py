@@ -112,7 +112,6 @@ class UserContributionsSerializer(BaseUserSerializer):
 	all_time_contribution = serializers.SerializerMethodField()
 
 	def get_contributions_this_month(self, user):
-		print(user.contributions.dates('date_credited', 'month'))
 		contribution = sum([contribution.amount for contribution in user.contributions.filter(
 			date_credited__month__gte=this_month(),
 			date_credited__month__lte=this_month()).all()])

@@ -11,31 +11,9 @@ from ..permissions import IsASocietyAdmin, IsSudoUser
 from ..serializers import BaseUserSerializer, UserRegistrationSerializer, UserInvitationSerializer
 
 
-class UserView(generics.ListCreateAPIView):
-	"""
-	List all users, or create a new user.
-	"""
-	def get_permissions(self):
-		if self.request.method == 'GET':
-			permission_classes = [IsAuthenticated, IsSudoUser]
-		else:
-			permission_classes = []
-		return [permission() for permission in permission_classes]
-
-	def get_serializer_class(self):
-		if self.request.method == 'GET':
-			return BaseUserSerializer
-		if self.request.method == 'POST':
-			return UserRegistrationSerializer
-
-	def get(self, request, format=None):
-		"""
-		List all users
-		"""
-		users = User.objects.all()
-		serializer = BaseUserSerializer(users, many=True)
-		return Response(serializer.data)
-
+class UserSignUpView(generics.CreateAPIView):
+	permission_classes = []
+	serializer_class = BaseUserSerializer
 	def post(self, request, format=None):
 		"""
 		Create a new user
@@ -47,6 +25,22 @@ class UserView(generics.ListCreateAPIView):
 		model_serializer.is_valid(raise_exception=True)
 		data = model_serializer.create_user()
 		return Response(BaseUserSerializer(data).data, status=status.HTTP_201_CREATED)
+
+
+class UserView(generics.ListAPIView):
+	"""
+	List all users, or create a new user.
+	"""
+	permission_classes = [IsAuthenticated, IsSudoUser]
+	serializer_class = BaseUserSerializer
+
+	def get(self, request, format=None):
+		"""
+		List all users
+		"""
+		users = User.objects.all()
+		serializer = BaseUserSerializer(users, many=True)
+		return Response(serializer.data)
 
 
 class InviteUserToSocietyView(generics.UpdateAPIView):
