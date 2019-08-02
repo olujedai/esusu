@@ -9,7 +9,7 @@ from api.exceptions import (MaximumMembersReachedException,
                             TenureDeadlinePassedException)
 from api.models import User
 from api.serializers import UserInvitationSerializer
-from api.views import InviteUserToSocietyView, UserView
+from api.views import InviteUserToSocietyView, UserView, UserSignUpView
 
 from .utils import (create_fake_society, create_tenure, empty_society,
                     fill_up_society, get_auth_token, get_deadline,
@@ -42,6 +42,9 @@ class UserTests(APITestCase):
         self.user_view = UserView.as_view()
         self.user_url = path('user/', self.user_view)
 
+        self.signup_view = UserSignUpView.as_view()
+        self.signup_url = path('auth/signup/', self.signup_view)
+
         self.invite_sender_view = InviteUserToSocietyView.as_view()
         self.invite_sender_url = 'invite/society/<int:pk>/'
         self.factory = APIRequestFactory()
@@ -50,8 +53,8 @@ class UserTests(APITestCase):
         """
         Ensure we can signup a new user with valid credentials.
         """
-        request = self.factory.post(self.user_url, data=self.valid_payload, format='json')
-        response = self.user_view(request)
+        request = self.factory.post(self.signup_url, data=self.valid_payload, format='json')
+        response = self.signup_view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIsNotNone(User.objects.filter(email=self.valid_payload['email']).first())
 
@@ -60,8 +63,8 @@ class UserTests(APITestCase):
         Ensure a user cannot signup twice.
         """
         self.existing_user_payload['confirm_password'] = self.existing_user_payload['password']
-        request = self.factory.post(self.user_url, data=self.existing_user_payload, format='json')
-        response = self.user_view(request)
+        request = self.factory.post(self.signup_url, data=self.existing_user_payload, format='json')
+        response = self.signup_view(request)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['email'][0], 'This email address already exists.')
 
@@ -69,8 +72,8 @@ class UserTests(APITestCase):
         """
         Ensure password and confirm_password fields are equal.
         """
-        request = self.factory.post(self.user_url, data=self.password_mismatch_payload, format='json')
-        response = self.user_view(request)
+        request = self.factory.post(self.signup_url, data=self.password_mismatch_payload, format='json')
+        response = self.signup_view(request)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['non_field_errors'][0], 'Passwords don\'t match.')
 

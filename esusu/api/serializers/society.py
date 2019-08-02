@@ -10,6 +10,9 @@ class SocietySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Society
 		fields = '__all__'
+		extra_kwargs = {
+			'account': {'read_only': True}
+		}
 
 	def save(self):
 		self.validated_data['creator'] = self.context['request'].user
