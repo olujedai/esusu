@@ -1,5 +1,5 @@
 # Esusu API
-Esusu savings finally digitised.
+Esusu societies finally digitised.
 
 
 ## Getting Started
@@ -27,4 +27,4 @@ It will take a fair bit of time the first time you do it, subsequently it will b
 * **Web Framework**: [Django](https://www.djangoproject.com/)
 * **REST API**: [Django Rest Framework](https://django-rest-framework.org/)
 * **Database**: [PostgreSQL](https://www.postgresql.org/)
-* **OpenAPI Support**: [drf-yasg - Yet another Swagger generator](https://github.com/axnsan12/drf-yasg/)
+* **OpenAPI Definitions**: [drf-yasg - Yet another Swagger generator](https://github.com/axnsan12/drf-yasg/)
