@@ -14,10 +14,12 @@ def get_max_end_date_time(arrow_date_time_obj, maximum_capacity, week_shift=4):
 	week_shift = maximum_capacity * week_shift
 	return arrow_date_time_obj.shift(weeks=+week_shift)
 
-def tenure_deadline_passed(inviter):
+def tenure_deadline_passed(inviter, date):
     if inviter.society.tenures.count():
-        current_tenure = inviter.society.tenures.order_by('-start_date').first()
+        current_tenure = inviter.society.active_tenure
         if current_tenure:
-            todays_date = arrow.now('Africa/Lagos').date()
-            return todays_date > current_tenure.tentative_end_date and todays_date < current_tenure.maximum_end_date
+            return date > current_tenure.tentative_end_date and date < current_tenure.maximum_end_date
     return False
+
+def todays_date():
+    return arrow.now('Africa/Lagos').date()

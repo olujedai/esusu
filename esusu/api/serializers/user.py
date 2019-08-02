@@ -6,8 +6,8 @@ from rest_framework import serializers, status
 
 from ..email import send_invite
 from ..models import User
-from .utils import this_month, tenure_deadline_passed
-from ..exceptions import CustomException
+from .utils import this_month, tenure_deadline_passed, todays_date
+from ..exceptions import MaximumMembersReachedException, TenureDeadlinePassedException, MemberAlreadyInASocietyException, SocietyGoneException
 from ..signals import user_joined_society
 
 
@@ -28,22 +28,23 @@ class BaseUserSerializer(serializers.ModelSerializer):
 
 class UserInvitationSerializer(serializers.Serializer):
 
-	def validate_invite(self, inviter, invited_user):
+	def validate_invite(self, inviter, invited_user, date=todays_date()):
 		if inviter.society.users.count() >= inviter.society.maximum_capacity:
-			raise CustomException(
+			raise MaximumMembersReachedException(
 				detail='Maximum number of users in this society has been reached.',
 				status_code='403'
 			)
-		if tenure_deadline_passed(inviter):
-			raise CustomException(
+		if tenure_deadline_passed(inviter, date):
+			raise TenureDeadlinePassedException(
 				detail='The last date for a user to join this group has passed.',
 				status_code='403'
 			)
 		if invited_user.society:
-			raise CustomException(
+			raise MemberAlreadyInASocietyException(
 				detail='This user already belongs to another society',
 				status_code='409'
 			)
+		return invited_user
 
 	def invite_user(self, server_name, inviter, invitee):
 		"""
@@ -71,19 +72,19 @@ class UserInvitationSerializer(serializers.Serializer):
 
 		send_invite(subject, EMAIL_HOST_USER, invitee.email, **email_values)
 
-	def validate_user_join(self, inviter, invitee):
-		if tenure_deadline_passed(inviter):
-			raise CustomException(
-				detail='The last date for a user to join this group has passed.',
-				status_code='403'
-			)
+	def validate_user_join(self, inviter, invitee, date=todays_date()):
 		if not inviter.society:
-			raise CustomException(
+			raise SocietyGoneException(
 				detail='This society does not exist anymore.',
 				status_code='410',
 			)
+		if tenure_deadline_passed(inviter, date):
+			raise TenureDeadlinePassedException(
+				detail='The last date for a user to join this group has passed.',
+				status_code='403'
+			)
 		if inviter.society.users.count() >= inviter.society.maximum_capacity:
-			raise CustomException(
+			raise MaximumMembersReachedException(
 				detail='The maximum number of users that can join this society has been reached.',
 				status_code='410',
 			)
@@ -91,10 +92,11 @@ class UserInvitationSerializer(serializers.Serializer):
 			detail = 'You are already a member of this society.'
 			if invitee.society != inviter.society:
 				detail = 'You already belong to another society.'
-			raise CustomException(
+			raise MemberAlreadyInASocietyException(
 				detail=detail,
 				status_code='409',
 			)
+		return invitee
 
 	def join_society(self, inviter, invitee):
 		"""
