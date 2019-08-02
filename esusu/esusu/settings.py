@@ -39,6 +39,17 @@ REST_FRAMEWORK = {
     ],
 }
 
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+   },
+   'USE_SESSION_AUTH': False,
+}
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -50,6 +61,7 @@ INSTALLED_APPS = [
 
     'django.contrib.postgres',
     'rest_framework',
+    'drf_yasg',
     'api.apps.AppConfig',
 ]
 

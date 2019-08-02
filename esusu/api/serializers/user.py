@@ -123,10 +123,14 @@ class UserContributionsSerializer(BaseUserSerializer):
 		return contribution
 
 
-class UserRegistrationSerializer(serializers.Serializer):
+class UserRegistrationSerializer(serializers.ModelSerializer):
 	email = serializers.EmailField()
 	password = serializers.CharField()
 	confirm_password = serializers.CharField()
+
+	class Meta:
+		model = User
+		fields = ('email', 'password', 'first_name', 'last_name', 'confirm_password')
 
 	def validate_email(self, value):
 		email = User.objects.normalize_email(value)
