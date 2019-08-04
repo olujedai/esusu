@@ -1,4 +1,4 @@
-# ESUSU API
+# Esusu API
 
 ## Routes Documentation
 
