@@ -9,10 +9,7 @@ import arrow
 class SocietySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Society
-		fields = '__all__'
-		extra_kwargs = {
-			'account': {'read_only': True}
-		}
+		exclude = ('account')
 
 	def save(self):
 		self.validated_data['creator'] = self.context['request'].user
@@ -31,6 +28,6 @@ class SocietyTenureSerializer(serializers.ModelSerializer):
 	active_tenure = TenureSerializer(read_only=True)
 	class Meta:
 		model = Society
-		fields = '__all__'
+		exclude = ('account')
 
 
