@@ -7,11 +7,11 @@ from .user import User
 
 
 class Debit(models.Model):
-    """
-    This model represents the debits made from a `SocietyAccount` to a `User`.
-    While from the view of the `Society`, it is a debit, the receiving user views this as a `collection`.
-    For more on this, see http://in-formality.com/wiki/index.php?title=Esusu_(Nigeria)
-    """
+	"""
+	This model represents the debits made from a `SocietyAccount` to a `User`.
+	While from the view of the `Society`, it is a debit, the receiving user views this as a `collection`.
+	For more on this, see http://in-formality.com/wiki/index.php?title=Esusu_(Nigeria)
+	"""
 	amount = models.IntegerField(
 		_('Amount'),
 		help_text=_(

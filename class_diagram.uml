@@ -1,0 +1,62 @@
+@startuml
+
+class User{
+    String email
+    String first_name
+    String last_name
+    Bool is_staff
+    Bool is_superuser
+    Bool is_society_admin
+    Bool is_active
+    DateTime date_joined
+    ArrayList Debit[] collections
+    ArrayList Credit[] contributions
+    String full_name()
+}
+
+class Society{
+    String name
+    String description
+    Int maximum_capacity
+    Int periodic_amount
+    Bool is_searchable
+    DateTime date_created
+    Tenure active_tenure()
+    User admin()
+}
+
+Society "1" *-- "many" User : has
+
+class SocietyAccount{
+    Integer balance
+    DateTime date_created
+}
+Society "1" *-- "1" SocietyAccount : has
+class Debit{
+    Integer amount
+    DateTime date_debited
+}
+SocietyAccount "1" *-- "many" Debit : has
+User "1" *-- "many" Debit : has
+class Credit{
+    Integer amount
+    DateTime date_credited
+}
+SocietyAccount "1" *-- "many" Credit : has
+User "1" *-- "many" Credit : has
+class Tenure{
+    Date start_date
+    Date tentative_end_date
+    Date maximum_end_date
+    Boolean is_active()
+    Boolean starts_soon()
+}
+Society "1" *-- "many" Tenure : has
+class CollectionSchedule{
+    Date collection_date
+}
+
+User "1" *-- "many" CollectionSchedule : has
+Tenure "1" *-- "many" CollectionSchedule : has
+
+@enduml

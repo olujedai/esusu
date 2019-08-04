@@ -1,5 +1,5 @@
 # Esusu API
-Esusu societies finally digitised.
+Esusu societies finally digitised. Learn more about Esusu [here](http://in-formality.com/wiki/index.php?title=Esusu_(Nigeria))
 
 
 ## Getting Started
@@ -39,6 +39,8 @@ Documentation of how to use the endpoints is found [here](https://github.com/olu
 * Users can only belong to one Esusu society throughout the duration of a tenure.
 * Each collection period lasts for 4 weeks instead of a month so that everyone in a society gets the same amount of money throughout the savings tenure.
 
+## Class Diagram
+![Esusu class diagram](/class_diagram.png?raw=true "Esusu Class Diagram")
 
 ## Technology Stack
 * **Language**: [Python](https://www.python.org/)
