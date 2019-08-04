@@ -14,7 +14,7 @@ from ..signals import user_joined_society
 class BaseUserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		exclude = ('groups', 'user_permissions', 'society')
+		exclude = ('groups', 'user_permissions', 'society', 'last_login', 'is_staff',)
 		extra_kwargs = {
 			'password': {'write_only': True}
 		}
