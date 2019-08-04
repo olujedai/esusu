@@ -14,85 +14,91 @@ import os
 from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+def getenv_var(NAME):
+	var = os.getenv(NAME)
+	if not var:
+		raise TypeError(f'Got None value for {NAME}')
+	return var
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'al683a5!-k%wu-@cyg!o-p!$wws2g^e186-!iu**a2-!^82aj@'
+SECRET_KEY = getenv_var('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(getenv_var('DEBUG')))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['vkvipzcj2f.execute-api.us-west-2.amazonaws.com']
 
 
 # Application definition
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [],
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+	'DEFAULT_PERMISSION_CLASSES': [],
+	'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+	'DEFAULT_AUTHENTICATION_CLASSES': [
+		'rest_framework_simplejwt.authentication.JWTAuthentication',
+	],
 }
 
 SWAGGER_SETTINGS = {
    'SECURITY_DEFINITIONS': {
-      'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-      }
+	  'Bearer': {
+			'type': 'apiKey',
+			'name': 'Authorization',
+			'in': 'header'
+	  }
    },
    'USE_SESSION_AUTH': False,
 }
 
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
 
-    'django.contrib.postgres',
-    'rest_framework',
-    'drf_yasg',
-    'api.apps.AppConfig',
+	'django.contrib.postgres',
+	'zappa_django_utils',
+	'rest_framework',
+	'drf_yasg',
+	'api.apps.AppConfig',
 ]
 
 AUTH_USER_MODEL = 'api.User'
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.middleware.security.SecurityMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'esusu.urls'
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [],
+		'APP_DIRS': True,
+		'OPTIONS': {
+			'context_processors': [
+				'django.template.context_processors.debug',
+				'django.template.context_processors.request',
+				'django.contrib.auth.context_processors.auth',
+				'django.contrib.messages.context_processors.messages',
+			],
+		},
+	},
 ]
 
 WSGI_APPLICATION = 'esusu.wsgi.application'
@@ -102,21 +108,21 @@ WSGI_APPLICATION = 'esusu.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'esusu_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-        'TEST': {
-            'NAME': 'esusu_test_db',
-            'USER': 'postgres',
-            'PASSWORD': 'postgres',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        },
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql',
+		'NAME': getenv_var('DATABASE_NAME'),
+		'USER': getenv_var('DATABASE_USER'),
+		'PASSWORD': getenv_var('DATABASE_PASSWORD'),
+		'HOST': getenv_var('DATABASE_HOST'),
+		'PORT': getenv_var('DATABASE_PORT'),
+		# 'TEST': {
+		# 	'NAME': getenv_var('TEST_DATABASE_NAME'),
+		# 	'USER': getenv_var('TEST_DATABASE_USER'),
+		# 	'PASSWORD': getenv_var('TEST_DATABASE_PASSWORD'),
+		# 	'HOST': getenv_var('TEST_DATABASE_HOST'),
+		# 	'PORT': getenv_var('TEST_DATABASE_PORT'),
+		# },
+	}
 }
 
 
@@ -124,18 +130,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+	{
+		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+	},
 ]
 
 
@@ -151,12 +157,11 @@ USE_TZ = True
 
 # Emails
 # https://docs.djangoproject.com/en/2.2/topics/email/
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = bool(int(os.getenv('EMAIL_USE_SSL')))
-
+EMAIL_HOST = getenv_var('EMAIL_HOST')
+EMAIL_PORT = int(getenv_var('EMAIL_PORT'))
+EMAIL_HOST_USER = getenv_var('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = getenv_var('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = bool(int(getenv_var('EMAIL_USE_TLS')))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -164,25 +169,25 @@ EMAIL_USE_TLS = bool(int(os.getenv('EMAIL_USE_SSL')))
 STATIC_URL = '/static/'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
+	'ACCESS_TOKEN_LIFETIME': timedelta(hours=5),
+	'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+	'ROTATE_REFRESH_TOKENS': False,
+	'BLACKLIST_AFTER_ROTATION': True,
 
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
+	'ALGORITHM': 'HS256',
+	'SIGNING_KEY': SECRET_KEY,
+	'VERIFYING_KEY': None,
 
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
+	'AUTH_HEADER_TYPES': ('Bearer',),
+	'USER_ID_FIELD': 'id',
+	'USER_ID_CLAIM': 'user_id',
 
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
+	'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+	'TOKEN_TYPE_CLAIM': 'token_type',
 
-    'JTI_CLAIM': 'jti',
+	'JTI_CLAIM': 'jti',
 
-    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+	'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+	'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+	'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
