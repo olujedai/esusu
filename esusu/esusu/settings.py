@@ -31,7 +31,7 @@ SECRET_KEY = getenv_var('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(getenv_var('DEBUG')))
 
-ALLOWED_HOSTS = ['vkvipzcj2f.execute-api.us-west-2.amazonaws.com', 'localhost']
+ALLOWED_HOSTS = ['vkvipzcj2f.execute-api.us-west-2.amazonaws.com', 'localhost', 'tcowy42dnj.execute-api.us-west-2.amazonaws.com']
 
 
 # Application definition
