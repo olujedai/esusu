@@ -5,10 +5,12 @@ from django.core import signing
 from rest_framework import serializers, status
 
 from ..email import send_invite
+from ..exceptions import (MaximumMembersReachedException,
+                          MemberAlreadyInASocietyException,
+                          SocietyGoneException, TenureDeadlinePassedException)
 from ..models import User
-from .utils import this_month, tenure_deadline_passed, todays_date
-from ..exceptions import MaximumMembersReachedException, TenureDeadlinePassedException, MemberAlreadyInASocietyException, SocietyGoneException
 from ..signals import user_joined_society
+from .utils import tenure_deadline_passed, this_month, todays_date
 
 
 class BaseUserSerializer(serializers.ModelSerializer):

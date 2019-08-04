@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ..models import Tenure
-from ..serializers import TenureSerializer
 from ..permissions import IsASocietyAdmin
+from ..serializers import TenureSerializer
 
 
 class NewTenureView(generics.ListCreateAPIView):

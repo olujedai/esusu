@@ -1,8 +1,7 @@
 import arrow
+from api.serializers import TenureSerializer, UserInvitationSerializer
 from rest_framework import serializers
 from rest_framework.test import APITestCase
-
-from api.serializers import TenureSerializer, UserInvitationSerializer
 
 from ..handlers import get_new_tentative_end_date
 from .utils import (create_fake_society, create_tenure, get_deadline,

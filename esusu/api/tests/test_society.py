@@ -1,10 +1,9 @@
+from api.models import Society
+from api.views import SearchSocietiesView, SocietyContributions, SocietyView
 from django.urls import path
 from rest_framework import status
 from rest_framework.test import (APIRequestFactory, APITestCase,
                                  force_authenticate)
-
-from api.models import Society
-from api.views import SearchSocietiesView, SocietyContributions, SocietyView
 
 from .utils import (add_user_to_society, create_fake_society,
                     delete_all_societies, get_auth_token, get_fake_user,

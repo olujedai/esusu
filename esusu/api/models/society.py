@@ -1,9 +1,10 @@
+import arrow
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
 from ..manager import SocietyManager
 from .society_account import SocietyAccount
-import arrow
 
 
 class Society(models.Model):

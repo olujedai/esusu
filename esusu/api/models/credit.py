@@ -2,9 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from ..manager import CreditManager
 from .society_account import SocietyAccount
 from .user import User
-from ..manager import CreditManager
 
 
 class Credit(models.Model):

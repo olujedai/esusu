@@ -1,9 +1,10 @@
-from api.models import User, Society, Tenure
-from rest_framework_simplejwt.tokens import RefreshToken
-from api.serializers import BaseUserSerializer, TenureSerializer
-import faker
-import arrow
 from math import floor
+
+import arrow
+import faker
+from api.models import Society, Tenure, User
+from api.serializers import BaseUserSerializer, TenureSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 fake = faker.Faker()
 
@@ -126,4 +127,3 @@ def get_deadline(tenure):
 	stop = tenure.maximum_end_date
 	shift = floor((stop - start).days / 2)
 	return arrow.get(start).shift(days=shift).date()
-
