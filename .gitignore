@@ -6,6 +6,11 @@ __pycache__/
 # vscode
 .vscode/
 
+# Zappa
+*.zip
+esusu/zappa_settings.json
+
+
 # Unit test / coverage reports
 htmlcov/
 .tox/

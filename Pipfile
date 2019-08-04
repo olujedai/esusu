@@ -5,6 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 faker = "*"
+awscli = "*"
+zappa = "*"
 
 [packages]
 django = "*"
@@ -14,6 +16,7 @@ psycopg2-binary = "*"
 arrow = "*"
 drf-yasg = "*"
 packaging = "*"
+zappa-django-utils = "*"
 
 [requires]
 python_version = "3.7"
