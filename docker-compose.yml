@@ -1,0 +1,39 @@
+version: '3.5'
+services:
+  esusu_db:
+    image: "postgres"
+    restart: always
+    environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+     - POSTGRES_DB=esusu_db
+     - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - esusu_data:/var/lib/postgresql/data
+    networks:
+      - esusu
+
+  esusu_api:
+    container_name: esusu_api
+    image: esusu_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: python esusu/manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - esusu_db
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - esusu
+
+volumes:
+  esusu_data:
+    external: false
+
+networks:
+  esusu:
+    driver: bridge
