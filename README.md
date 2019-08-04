@@ -1,5 +1,5 @@
 # Esusu API
-Esusu societies finally digitised.
+Esusu societies finally digitised. Learn more about Esusu [here](http://in-formality.com/wiki/index.php?title=Esusu_(Nigeria))
 
 
 ## Getting Started
