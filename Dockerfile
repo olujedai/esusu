@@ -12,7 +12,6 @@ RUN apk update && apk add --virtual .build-deps \
     musl-dev && \
     pip install -r requirements.txt --no-cache-dir --timeout 60 && \
     apk --purge del .build-deps
-
 COPY esusu esusu
 
 EXPOSE 8000
