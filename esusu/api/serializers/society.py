@@ -9,7 +9,7 @@ import arrow
 class SocietySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Society
-		exclude = ('account')
+		exclude = ('account',)
 
 	def save(self):
 		self.validated_data['creator'] = self.context['request'].user
@@ -19,15 +19,17 @@ class SocietySerializer(serializers.ModelSerializer):
 		return Society.objects.get_contributions(**self.data)
 
 
-class SocietyUserSerializer(SocietySerializer):
+class SocietyUserSerializer(serializers.ModelSerializer):
 	account = SocietyAccountSerializer(read_only=True)
 	users = UserContributionsSerializer(many=True, read_only=True)
+
+	class Meta:
+		model = Society
+		fields = '__all__'
 
 
 class SocietyTenureSerializer(serializers.ModelSerializer):
 	active_tenure = TenureSerializer(read_only=True)
 	class Meta:
 		model = Society
-		exclude = ('account')
-
-
+		exclude = ('account',)

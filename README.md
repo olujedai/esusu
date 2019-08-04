@@ -24,13 +24,20 @@ It will take a fair bit of time the first time you do it, subsequently it will b
 8. The first time you run the app, you may need to run the **migrations** to ensure that all the tables are created in the database. While the app is running (after following the previous step), run the following in **another terminal/command prompt**: 
 ```docker-compose run esusu_api python esusu/manage.py migrate```
 
+## Endpoint Documention
+Documentation of how to use the endpoints is found [here](https://github.com/olujedai/esusu/blob/master/ENDPOINTS.md)
+
+
+## Running Tests
+* ```pipenv install -d```
+* ```pipenv shell```
+* ```cd esusu/esusu```
+* ```python manage.py tests```
+
+
 ## Assumptions
 * Users can only belong to one Esusu society throughout the duration of a tenure.
 * Each collection period lasts for 4 weeks instead of a month so that everyone in a society gets the same amount of money throughout the savings tenure.
-
-
-## Endpoint Documention
-Documentation of how to use the endpoints is found [here](https://github.com/olujedai/esusu/blob/master/ENDPOINTS.md)
 
 
 ## Technology Stack
