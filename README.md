@@ -25,8 +25,8 @@ It will take a fair bit of time the first time you do it, subsequently it will b
 ```docker-compose run esusu_api python esusu/manage.py migrate```
 
 ## Assumptions
-* Users can only belong to one Esusu society at a time.
-* There are 4 weeks (instead of 1 month) between collection periods to ensure that everyone gets the same amount of money throughout the savings tenure.
+* Users can only belong to one Esusu society throughout the duration of a tenure.
+* Each collection period lasts for 4 weeks instead of a month so that everyone in a society gets the same amount of money throughout the savings tenure.
 
 ## Technology Stack
 * **Language**: [Python](https://www.python.org/)
