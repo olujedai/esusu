@@ -1,5 +1,6 @@
-from .models.collection_schedule import CollectionSchedule
 import arrow
+
+from .models.collection_schedule import CollectionSchedule
 
 
 def get_new_tentative_end_date(date):

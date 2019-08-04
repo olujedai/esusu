@@ -5,10 +5,11 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from ..exceptions import CustomException
 from ..models import Society, User
 from ..permissions import IsASocietyAdmin, IsNotInASociety
-from ..serializers import SocietySerializer, SocietyUserSerializer, SocietyTenureSerializer
-from ..exceptions import CustomException
+from ..serializers import (SocietySerializer, SocietyTenureSerializer,
+                           SocietyUserSerializer)
 
 
 class SocietyView(generics.ListCreateAPIView):

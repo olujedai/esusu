@@ -1,9 +1,10 @@
+import arrow
 from rest_framework import serializers
+
 from ..models import Society
 from .society_account import SocietyAccountSerializer
-from .user import UserContributionsSerializer
 from .tenure import TenureSerializer
-import arrow
+from .user import UserContributionsSerializer
 
 
 class SocietySerializer(serializers.ModelSerializer):

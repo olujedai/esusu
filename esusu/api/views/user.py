@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from ..exceptions import CustomException
 from ..models import User
 from ..permissions import IsASocietyAdmin, IsSudoUser
-from ..serializers import BaseUserSerializer, UserRegistrationSerializer, UserInvitationSerializer
+from ..serializers import (BaseUserSerializer, UserInvitationSerializer,
+                           UserRegistrationSerializer)
 
 
 class UserSignUpView(generics.CreateAPIView):

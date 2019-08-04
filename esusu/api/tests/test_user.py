@@ -1,15 +1,14 @@
-from django.urls import path
-from rest_framework import status
-from rest_framework.test import (APIRequestFactory, APITestCase,
-                                 force_authenticate)
-
 from api.exceptions import (MaximumMembersReachedException,
                             MemberAlreadyInASocietyException,
                             SocietyGoneException,
                             TenureDeadlinePassedException)
 from api.models import User
 from api.serializers import UserInvitationSerializer
-from api.views import InviteUserToSocietyView, UserView, UserSignUpView
+from api.views import InviteUserToSocietyView, UserSignUpView, UserView
+from django.urls import path
+from rest_framework import status
+from rest_framework.test import (APIRequestFactory, APITestCase,
+                                 force_authenticate)
 
 from .utils import (create_fake_society, create_tenure, empty_society,
                     fill_up_society, get_auth_token, get_deadline,

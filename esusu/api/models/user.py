@@ -1,11 +1,14 @@
+from django.contrib.auth.models import (AbstractBaseUser, AbstractUser,
+                                        PermissionsMixin)
 from django.db import models
-from django.utils import timezone
-from django.contrib.auth.models import AbstractBaseUser, AbstractUser, PermissionsMixin
-from django.utils.translation import gettext_lazy as _
-from .society import Society
-from ..manager import UserManager
-from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
+from ..manager import UserManager
+from .society import Society
+
 
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):

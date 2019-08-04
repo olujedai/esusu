@@ -1,8 +1,9 @@
+import arrow
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
 from .society import Society
-import arrow
 
 
 class Tenure(models.Model):
@@ -49,4 +50,3 @@ class Tenure(models.Model):
 	def starts_soon(self):
 		todays_date = arrow.now('Africa/Lagos').date()
 		return todays_date <= self.start_date
-
