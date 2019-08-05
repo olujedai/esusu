@@ -67,7 +67,7 @@ class Tenure(models.Model):
 
 	def is_active(self):
 		todays_date = arrow.now('Africa/Lagos').date()
-		return todays_date > self.start_date and todays_date <= tentative_end_date
+		return todays_date > self.start_date and todays_date <= self.tentative_end_date
 
 	def starts_soon(self):
 		todays_date = arrow.now('Africa/Lagos').date()
