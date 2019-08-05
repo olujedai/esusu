@@ -8,7 +8,7 @@ class CreditManager(models.Manager):
 
 	def create(self, **data):
 		"""
-		Create and save a Credit and make the creator the administrator.
+		Create and save a Credit.
 		"""
 		contributor = data['contributor']
 		account = contributor.society.account
