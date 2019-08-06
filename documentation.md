@@ -2,7 +2,7 @@
 
 ## API Documentation
 All endpoints except those for user signup and login require an authorization ```access_key``` sent in the ```Authorization``` header along with the request. The token can be obtained after user login by copying the contents of the access_key field in the login response object.
-The expected header format is ```Bearer <access_key>```
+The expected header value is ```Bearer <access_key>```
 
 ### User Registration (Sign up)
 
@@ -18,7 +18,7 @@ Type | description
 ---- |  -----------
 **UserSignup** object | Object containing user signup form values.
 
-#### Response Status Code: 201
+#### Response Status Code: 201, 403
 #### Response Object
 
 Name | Type | description
@@ -39,7 +39,7 @@ Type | description
 ---- |  -----------
 **Login** object | Object containing user signup form values.
 
-#### Response Status Code: 201
+#### Response Status Code: 201, 403, 404
 #### Response Object
 
 Name | Type | description
