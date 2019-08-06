@@ -6,8 +6,8 @@ from rest_framework import serializers, status
 
 from ..email import send_invite
 from ..exceptions import (MaximumMembersReachedException,
-                          MemberAlreadyInASocietyException,
-                          SocietyGoneException, TenureDeadlinePassedException)
+						  MemberAlreadyInASocietyException,
+						  SocietyGoneException, TenureDeadlinePassedException)
 from ..models import User
 from ..signals import user_joined_society
 from .utils import tenure_deadline_passed, this_month, todays_date
@@ -72,6 +72,7 @@ class UserInvitationSerializer(serializers.Serializer):
 			'signup_url': f'{server_name}/join/?society={signed_string}',
 		}
 
+		print(subject, EMAIL_HOST_USER, invitee.email)
 		send_invite(subject, EMAIL_HOST_USER, invitee.email, **email_values)
 
 	def validate_user_join(self, inviter, invitee, date=todays_date()):

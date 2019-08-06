@@ -25,7 +25,7 @@ It will take a fair bit of time the first time you do it, subsequently it will b
 ```docker-compose run esusu_api python esusu/manage.py migrate```
 
 ## Endpoint Documention
-Documentation of how to use the endpoints is found [here](https://github.com/olujedai/esusu/blob/master/ENDPOINTS.md)
+Documentation of how to use the endpoints is found [here](https://github.com/olujedai/esusu/blob/master/documentation.md)
 
 
 ## Running Tests

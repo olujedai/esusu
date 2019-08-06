@@ -9,7 +9,7 @@ from ..exceptions import CustomException
 from ..models import User
 from ..permissions import IsASocietyAdmin, IsSudoUser
 from ..serializers import (BaseUserSerializer, UserInvitationSerializer,
-                           UserRegistrationSerializer)
+						   UserRegistrationSerializer)
 
 
 class UserSignUpView(generics.CreateAPIView):

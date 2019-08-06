@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -25,8 +26,12 @@ class TenureDetail(generics.RetrieveAPIView):
 	permission_classes = (IsAuthenticated, IsASocietyAdmin,)
 	serializer_class = TenureSerializer
 
-	# def retrieve(self, request):
-	# 	return Response(TenureSerializer(request.user.society).data, status=status.HTTP_200_OK)
+	def get_object(self, pk):
+		try:
+			return Tenure.objects.get(pk=pk)
+		except Tenure.DoesNotExist:
+			raise Http404
 
-	def get_queryset(self):
-		return self.request.user.society.tenures.order_by('-start_date').first()
+	def retrieve(self, _, pk):
+		tenure = self.get_object(pk)
+		return Response(TenureSerializer(tenure).data, status=status.HTTP_200_OK)
