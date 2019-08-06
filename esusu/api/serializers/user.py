@@ -71,8 +71,6 @@ class UserInvitationSerializer(serializers.Serializer):
 			'society_name': society_name,
 			'signup_url': f'{server_name}/join/?society={signed_string}',
 		}
-
-		print(subject, EMAIL_HOST_USER, invitee.email)
 		send_invite(subject, EMAIL_HOST_USER, invitee.email, **email_values)
 
 	def validate_user_join(self, inviter, invitee, date=todays_date()):

@@ -61,7 +61,11 @@ class InviteUserToSocietyView(generics.UpdateAPIView):
 		invited_user = self.get_object(pk)
 		inviter = request.user
 		UserInvitationSerializer().validate_invite(inviter, invited_user)
-		server_name = request.META['HTTP_HOST']
+		scheme = request.is_secure() and "https" or "http"
+		server_name = f"{scheme}://{request.META['HTTP_HOST']}"
+		path = request.META['PATH_INFO']
+		if 'amazonaws' in set(request.META['HTTP_HOST'].split('.')):
+			server_name = f"{server_name}/{path.split('/')[1]}/"
 		UserInvitationSerializer().invite_user(server_name, inviter, invited_user)
 		return Response({'message': 'User invite sent.'}, status=status.HTTP_202_ACCEPTED)
 

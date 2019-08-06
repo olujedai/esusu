@@ -48,3 +48,4 @@ Documentation of how to use the endpoints is found [here](https://github.com/olu
 * **REST API**: [Django Rest Framework](https://django-rest-framework.org/)
 * **Database**: [PostgreSQL](https://www.postgresql.org/)
 * **OpenAPI**: [Yet another Swagger generator](https://github.com/axnsan12/drf-yasg/)
+* **JWT**: [Simple JWT](https://github.com/davesque/django-rest-framework-simplejwt)
