@@ -63,9 +63,9 @@ class InviteUserToSocietyView(generics.UpdateAPIView):
 		UserInvitationSerializer().validate_invite(inviter, invited_user)
 		scheme = request.is_secure() and "https" or "http"
 		server_name = f"{scheme}://{request.META['HTTP_HOST']}"
-		path = request.META['PATH_INFO']
 		if 'amazonaws' in set(request.META['HTTP_HOST'].split('.')):
-			server_name = f"{server_name}/{path.split('/')[1]}/"
+			zappa_env = 'prod' if settings.IS_ZAPPA_PROD else 'dev'
+			server_name = f"{server_name}/{zappa_env}"
 		UserInvitationSerializer().invite_user(server_name, inviter, invited_user)
 		return Response({'message': 'User invite sent.'}, status=status.HTTP_202_ACCEPTED)
 

@@ -27,7 +27,7 @@ def getenv_var(NAME):
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = getenv_var('SECRET_KEY')
-
+IS_ZAPPA_PROD = bool(int(getenv_var('IS_ZAPPA_PROD')))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(getenv_var('DEBUG')))
 
