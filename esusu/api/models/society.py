@@ -66,4 +66,9 @@ class Society(models.Model):
 	
 	@property
 	def admin(self):
-		return self.users.filter(is_society_admin=True).first()
+		society_admin = {
+			'admin': None
+		}
+		if not society_admin['admin']:
+			society_admin['admin'] = self.users.filter(is_society_admin=True).first()
+		return society_admin['admin']
