@@ -35,9 +35,9 @@ Documentation of how to use the endpoints is found [here](https://github.com/olu
 * ```python manage.py tests```
 
 
-## Assumptions
+<!-- ## Assumptions
 * Users can only belong to one Esusu society throughout the duration of a tenure.
-* Each collection period lasts for 4 weeks instead of a month so that everyone in a society gets the same amount of money throughout the savings tenure.
+* Each collection period lasts for 4 weeks instead of a month so that everyone in a society gets the same amount of money throughout the savings tenure. -->
 
 ## Class Diagram
 ![Esusu class diagram](/class_diagram.png?raw=true "Esusu Class Diagram")
